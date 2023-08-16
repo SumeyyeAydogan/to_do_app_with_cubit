@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:to_do_app_with_cubit/data/local_storage.dart';
-import 'package:to_do_app_with_cubit/features/model/task_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do_app_with_cubit/core/init/theme/to_do_theme.dart';
+import 'package:to_do_app_with_cubit/features/cubit/to_do_cubit.dart';
+import 'package:to_do_app_with_cubit/features/cubit/to_do_state.dart';
 import 'package:to_do_app_with_cubit/features/view/home_view.dart';
 
-final locator = GetIt.instance;
+import 'product/service/locator.dart';
 
-void setUp() {
-  locator.registerSingleton<LocalStorage>(HiveLocalStorage());
-}
 
-Future<void> setUpHive() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(TaskAdapter());
-  var taskBox = await Hive.openBox<Task>('tasks');
-  /* taskBox.values.forEach((element) {
-    if (element.createdAt!.hour != DateTime.now().day) {
-      taskBox.delete(element.id);
-    }
-  }); */
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding
@@ -40,19 +27,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.blue),
-        ),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context)=> ToDoCubit(InitialAppState()))
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ToDoTheme.defaultTheme,
+        home: HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }

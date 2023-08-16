@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> ToDoCubit(InitialAppState()))
+        BlocProvider(create: (context)=> ToDoCubit(InitialAppState()),)
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

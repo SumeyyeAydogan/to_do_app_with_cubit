@@ -1,9 +1,61 @@
-abstract class ToDoState {
-  
+import 'package:equatable/equatable.dart';
+
+import '../model/task_model.dart';
+
+abstract class ToDoState extends Equatable {}
+
+class InitialAppState extends ToDoState {
+  @override
+  List<Object?> get props => [];
 }
 
-class InitialAppState extends ToDoState {}
-class SetCurrentIndexAppState extends ToDoState{}
-class SetDateState extends ToDoState{}
-class GetBoxState extends ToDoState{}
-class SetDateState extends ToDoState{}
+class SetCurrentIndexAppState extends ToDoState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AddedTaskState extends ToDoState {
+  AddedTaskState(this.newAddedTask);
+  final Task newAddedTask;
+  @override
+  List<Object?> get props => [newAddedTask];
+}
+
+class SetCompletedState extends ToDoState {
+  SetCompletedState(this.isCompleted);
+  final bool isCompleted;
+  @override
+  List<Object?> get props => [isCompleted];
+}
+
+class SetNameState extends ToDoState {
+  SetNameState(this.newName);
+  final String newName;
+  @override
+  List<Object?> get props => [newName];
+}
+
+class DeleteTaskState extends ToDoState {
+  @override
+  List<Object?> get props => [];
+}
+
+class GetBoxState extends ToDoState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SetDateState extends ToDoState {
+  SetDateState(this.initialDate);
+
+  final DateTime? initialDate;
+  @override
+  List<Object?> get props => [initialDate];
+}
+
+class GetAllTaskState extends ToDoState {
+  GetAllTaskState(this.allTasks);
+  final List<Task>? allTasks;
+  @override
+  List<Object?> get props => [allTasks];
+}

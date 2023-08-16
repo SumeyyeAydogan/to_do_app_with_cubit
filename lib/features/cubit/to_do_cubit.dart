@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:to_do_app_with_cubit/features/cubit/to_do_state.dart';
 
-import '../../product/data/local_storage.dart';
+import '../../product/service/local_storage.dart';
 import '../../product/service/locator.dart';
 import '../../product/widget/custom_search_delegate.dart';
 import '../model/task_model.dart';
@@ -16,9 +16,10 @@ class ToDoCubit extends Cubit<ToDoState> {
 
   //initilizing
   int currentIndex = 0;
-  int currentListIndex = 0;
+  //int currentListIndex = 0;
+  //late Task task = allTasks![currentListIndex];
+  //late Task task;
   late List<Task>? allTasks = <Task>[]; //doğrusu _alltasks şeklinde mi yazmak?
-  late Task task = allTasks![currentListIndex];
   DateTime initialDate = DateTime.now();
   List<int>? keys = [];
 
@@ -42,7 +43,7 @@ class ToDoCubit extends Cubit<ToDoState> {
         allTasks!.insert(0, newAddedTask);
         await _localStorage.addTask(task: newAddedTask);
       }
-      emit(SetDateState());
+      emit(SetDateState(initialDate));
     });
     /* showTimePicker(context: context, initialTime: nowTime)
         .then((time) async {
@@ -54,28 +55,40 @@ class ToDoCubit extends Cubit<ToDoState> {
     }); */
   }
 
+  addTask(String value, DateTime? date) async {
+    var newAddedTask = Task.create(
+        name: value,
+        createdAt: date); //eklerken initialDate sıfırlanır mı acaba?
+    //allTasks!.insert(0, newAddedTask);
+    await _localStorage.addTask(task: newAddedTask);
+    emit(AddedTaskState(newAddedTask));
+  }
+
   setBottomIndex(index) {
     currentIndex = index;
     emit(SetCurrentIndexAppState());
   }
 
-  setListIndex(listIndex) {
+  /* setListIndex(listIndex) {
     currentListIndex = listIndex;
-  }
+  } */
 
-  setName(newValue) {
+  setName(String newValue, Task task) {
     task.name = newValue;
     _localStorage.updateTask(task: task);
+    emit(SetNameState(newValue));
   }
 
-  setCompleted() {
+  setCompleted(Task task) async {
     task.isCompleted = !task.isCompleted;
-    _localStorage.updateTask(task: task);
+    await _localStorage.updateTask(task: task);
+    emit(SetCompletedState(task.isCompleted));
   }
 
-  deleteTask() {
-    allTasks!.removeAt(currentListIndex);
-    _localStorage.deleteTask(task: task);
+  deleteTask(Task task) async {
+    //allTasks!.removeAt(currentListIndex);
+    await _localStorage.deleteTask(task: task);
+    emit(DeleteTaskState());
   }
 
   void getAllTaskFromDb() async {

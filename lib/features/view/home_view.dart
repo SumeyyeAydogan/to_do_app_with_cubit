@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_do_app_with_cubit/core/constants/application_constants.dart';
-import 'package:to_do_app_with_cubit/product/data/local_storage.dart';
+import 'package:to_do_app_with_cubit/product/service/local_storage.dart';
 import 'package:to_do_app_with_cubit/features/cubit/to_do_cubit.dart';
 import 'package:to_do_app_with_cubit/features/cubit/to_do_state.dart';
-import 'package:to_do_app_with_cubit/features/model/task_model.dart';
 import 'package:to_do_app_with_cubit/features/view/all_todos_view.dart';
 import 'package:to_do_app_with_cubit/features/view/archive_view.dart';
 import 'package:to_do_app_with_cubit/product/widget/task_list_item.dart';
 import '../../product/service/locator.dart';
+import '../model/task_model.dart';
 import 'done_view.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,24 +20,6 @@ class HomePage extends StatelessWidget {
   ];
 
   final LocalStorage _localStorage = locator<LocalStorage>();
-
-  /* @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late TimeOfDay nowTime;
-  late List<Task>? _allTasks;
-  late LocalStorage _localStorage;
-
-  @override
-  void initState() {
-    super.initState();
-    _localStorage = locator<LocalStorage>();
-    nowTime = TimeOfDay.now();
-    _allTasks = <Task>[];
-    _getAllTaskFromDb();
-  } */
 
   @override
   Widget build(BuildContext context) {
@@ -76,33 +58,12 @@ class _HomePageState extends State<HomePage> {
                   BottomNavigationBarItem(
                       icon: Icon(Icons.archive_outlined), label: "Archived"),
                 ]),
-            body: cubit.allTasks!.isNotEmpty
-                ? ListView.builder(
-                    itemBuilder: (context, index) {
-                      var thisTask = cubit.allTasks![index];
-                      cubit.setListIndex(index);
-                      return Dismissible(
-                        //yana kaydırınca silmek için
-                        background: const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.grey,
-                            )),
-                        key: Key(thisTask.id),
-                        onDismissed: (direction) {
-                          //cubit.deleteTask();
-                          cubit.allTasks!.removeAt(index);
-                          _localStorage.deleteTask(task: thisTask);
-                        },
-                        child: TaskItem(task: thisTask),
-                      );
-                    },
-                    itemCount: cubit.allTasks!.length,
-                  )
-                : const Center(
+            body: /* cubit.allTasks!.isNotEmpty
+                ? */ screenList[cubit.currentIndex]
+                /* : const Center(
                     child: Text(ApplicationConstants.ADD_TASK),
-                  ));
+                  ) */
+                  );
       },
     );
   }
@@ -131,23 +92,32 @@ class _HomePageState extends State<HomePage> {
                       hintText: ApplicationConstants.TYPE_TASK,
                       border: InputBorder.none, //alttatki çizgiyi kaldırdı
                     ),
-                    onSubmitted: (value) {
+                    onSubmitted: (value) async {
                       Navigator.of(context).pop();
                       if (value.length > 3) {
                         cubit.setDate(context, value);
-
-                        /* DatePicker.showTimePicker(
-                                  context,
-                                  showSecondsColumn: false,
-                                  onConfirm: (time) async {
-                                    var newAddedTask =
-                                        Task.create(name: value, createdAt: time);
-                                    _allTasks!.insert(0, newAddedTask);
-                                    await _localStorage.addTask(task: newAddedTask);
-                                    setState(() {});
-                                  },
-                                ); */
+                        if (state is SetDateState) {
+                          var newAddedTask = Task.create(
+                              name: value, createdAt: state.initialDate);
+                          cubit.allTasks!.add(newAddedTask);
+                        }
+                        /* await cubit.setDate(context);
+                        if (state is SetDateState) {
+                          await cubit.addTask(value, state.initialDate);
+                        }
+                        if (state is AddedTaskState) {
+                          cubit.allTasks!.add(state.newAddedTask);
+                        } else {
+                          const SnackBar(
+                            content: Text("Task couldn't add, an error"),
+                            backgroundColor: Colors.red,
+                          );
+                        } */
                       }
+                      const SnackBar(
+                        content: Text(ApplicationConstants.VALIDATE_FORM_ERROR),
+                        backgroundColor: Colors.red,
+                      );
                     },
                   ),
                 );

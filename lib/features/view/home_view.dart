@@ -102,11 +102,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).pop();
                       if (value.length > 3) {
                         cubit.setDate(context, value);
-                        if (state is SetDateState) {
+                        /* if (state is SetDateState) {
                           var newAddedTask = Task.create(
                               name: value, createdAt: state.initialDate);
                           cubit.allTasks!.add(newAddedTask);
-                        }
+                        } */
                         /* await cubit.setDate(context);
                         if (state is SetDateState) {
                           await cubit.addTask(value, state.initialDate);

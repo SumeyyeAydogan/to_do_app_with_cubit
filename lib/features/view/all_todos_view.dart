@@ -42,12 +42,5 @@ class AllToDosPage extends StatelessWidget {
         );
       },
     );
-    /* ListView.builder(
-      itemBuilder: (context, index) {
-        return Text(index.toString() + "all todos page");
-      },
-      itemCount: 20,
-      shrinkWrap: true,
-    ); */
   }
 }

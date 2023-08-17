@@ -46,11 +46,11 @@ class GetBoxState extends ToDoState {
 }
 
 class SetDateState extends ToDoState {
-  SetDateState(this.initialDate);
-
+  SetDateState(this.initialDate, this.newAddedTask);
+  final Task newAddedTask;
   final DateTime? initialDate;
   @override
-  List<Object?> get props => [initialDate];
+  List<Object?> get props => [initialDate, newAddedTask];
 }
 
 class GetAllTaskState extends ToDoState {

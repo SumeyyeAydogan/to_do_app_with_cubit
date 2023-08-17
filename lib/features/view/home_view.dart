@@ -59,11 +59,12 @@ class HomePage extends StatelessWidget {
                       icon: Icon(Icons.archive_outlined), label: "Archived"),
                 ]),
             body: /* cubit.allTasks!.isNotEmpty
-                ? */ screenList[cubit.currentIndex]
-                /* : const Center(
+                ? */
+                screenList[cubit.currentIndex]
+            /* : const Center(
                     child: Text(ApplicationConstants.ADD_TASK),
                   ) */
-                  );
+            );
       },
     );
   }
@@ -80,7 +81,12 @@ class HomePage extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             child: BlocConsumer<ToDoCubit, ToDoState>(
               listener: (context, state) {
-                // TODO: implement listener
+                if(state is SetDateState){
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Date was selected, an error"),
+                        backgroundColor: Colors.red,
+                      ));
+                }
               },
               builder: (context, state) {
                 var cubit = ToDoCubit.get(context);
@@ -108,16 +114,17 @@ class HomePage extends StatelessWidget {
                         if (state is AddedTaskState) {
                           cubit.allTasks!.add(state.newAddedTask);
                         } else {
-                          const SnackBar(
-                            content: Text("Task couldn't add, an error"),
-                            backgroundColor: Colors.red,
-                          );
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Task couldn't add, an error"),,
+                        backgroundColor: Colors.red,
+                      ));
                         } */
-                      }
-                      const SnackBar(
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(ApplicationConstants.VALIDATE_FORM_ERROR),
                         backgroundColor: Colors.red,
-                      );
+                      ));}
+                      
                     },
                   ),
                 );

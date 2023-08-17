@@ -22,6 +22,7 @@ class ToDoCubit extends Cubit<ToDoState> {
   late List<Task>? allTasks = <Task>[]; //doğrusu _alltasks şeklinde mi yazmak?
   DateTime initialDate = DateTime.now();
   List<int>? keys = [];
+  var newAddedTask;
 
   //controller
 
@@ -39,11 +40,11 @@ class ToDoCubit extends Cubit<ToDoState> {
         .then((date) async {
       if (date != null) {
         initialDate = date;
-        var newAddedTask = Task.create(name: value, createdAt: date);
+        newAddedTask = Task.create(name: value, createdAt: date);
         allTasks!.insert(0, newAddedTask);
         await _localStorage.addTask(task: newAddedTask);
       }
-      emit(SetDateState(initialDate));
+      emit(SetDateState(initialDate, newAddedTask));
     });
     /* showTimePicker(context: context, initialTime: nowTime)
         .then((time) async {

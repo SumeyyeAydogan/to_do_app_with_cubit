@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:to_do_app_with_cubit/core/extension/context_extension.dart';
 
 class ToDoTile extends StatelessWidget {
   const ToDoTile({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class ToDoTile extends StatelessWidget {
           IconButton(onPressed: (){}, icon: const Icon(Icons.book)),
         ],
       ),
-      subtitle: Padding(padding: EdgeInsets.all(8),
+      subtitle: Padding(padding: context.paddingExtraLow,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -28,4 +29,6 @@ class ToDoTile extends StatelessWidget {
       ),
     );
   }
-}
+} */
+
+//Dateli kod

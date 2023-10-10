@@ -10,12 +10,12 @@ class ToDoTheme {
         error: Color(0xfffcb064),
         primaryContainer: Color(0xfff8f4f4),
         secondaryContainer: Color(0xFFEDF4F3)),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
         toolbarHeight: 65,
-        titleTextStyle: const TextStyle(color: Colors.black),
-        color: const Color(0xFFFAFAFA),
+        titleTextStyle:  TextStyle(color: Colors.black),
+        color:  Color(0xFFFAFAFA),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black)),
+        iconTheme:  IconThemeData(color: Colors.black)),
     scaffoldBackgroundColor: const Color(0xFFFAFAFA),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(

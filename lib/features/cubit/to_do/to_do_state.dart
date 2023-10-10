@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../model/task_model.dart';
+import '../../model/task_model.dart';
 
 abstract class ToDoState extends Equatable {}
 
@@ -10,8 +10,10 @@ class InitialAppState extends ToDoState {
 }
 
 class SetCurrentIndexAppState extends ToDoState {
+  SetCurrentIndexAppState(this.currentIndex);
+  final int currentIndex;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [currentIndex];
 }
 
 class AddedTaskState extends ToDoState {
@@ -36,8 +38,11 @@ class SetNameState extends ToDoState {
 }
 
 class DeleteTaskState extends ToDoState {
+  final String index;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [index];
+
+  DeleteTaskState(this.index);
 }
 
 class GetBoxState extends ToDoState {
@@ -48,7 +53,7 @@ class GetBoxState extends ToDoState {
 class SetDateState extends ToDoState {
   SetDateState(this.initialDate, this.newAddedTask);
   final Task newAddedTask;
-  final DateTime? initialDate;
+  DateTime? initialDate;
   @override
   List<Object?> get props => [initialDate, newAddedTask];
 }

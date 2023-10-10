@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do_app_with_cubit/features/cubit/to_do_cubit.dart';
+import 'package:to_do_app_with_cubit/features/cubit/to_do/to_do_cubit.dart';
 import 'package:to_do_app_with_cubit/product/service/local_storage.dart';
-import '../../features/cubit/to_do_state.dart';
+import '../../features/cubit/to_do/to_do_state.dart';
 import '../../features/model/task_model.dart';
 import '../service/locator.dart';
 
 class TaskItem extends StatelessWidget {
-  Task task;
-  TaskItem({Key? key, required this.task}) : super(key: key);
+  final Task task;
+  final TextEditingController taskNameController;
+  const TaskItem(
+      {Key? key, required this.task, required this.taskNameController})
+      : super(key: key);
 
-  late LocalStorage
-      _localStorage; 
- //LateError (LateInitializationError: Field '_localStorage@43433232' has not been initialized.)
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ToDoCubit, ToDoState>(
@@ -22,15 +22,17 @@ class TaskItem extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = ToDoCubit.get(context);
-        cubit.taskNameController.text =
-            task.name;
+        Future.microtask(() {
+          taskNameController.text = task.name;
+        }); //Futuremicrotask
+
         /*Exception has occurred.
         FlutterError (setState() or markNeedsBuild() called during build.
         This AnimatedBuilder widget cannot be marked as needing to build because the framework is already in the process of building widgets. A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
         The widget on which setState() or markNeedsBuild() was called was:
           AnimatedBuilder
         The widget which was currently being built when the offending call was made was:
-          BlocBuilder<ToDoCubit, ToDoState>) */    
+          BlocBuilder<ToDoCubit, ToDoState>) */
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
           decoration: BoxDecoration(
@@ -52,7 +54,7 @@ class TaskItem extends StatelessWidget {
                         color: Colors.grey),
                   )
                 : TextField(
-                    controller: cubit.taskNameController,
+                    controller: taskNameController,
                     minLines: 1,
                     maxLines: null,
                     textInputAction: TextInputAction
@@ -88,7 +90,7 @@ class TaskItem extends StatelessWidget {
               ),
             ),
             trailing: Text(
-              DateFormat("hh: mm a").format(cubit.initialDate),
+              DateFormat("hh: mm a").format(task.createdAt!),
             ),
           ),
         );

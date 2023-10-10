@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_do_app_with_cubit/features/cubit/to_do_cubit.dart';
+import 'package:to_do_app_with_cubit/features/cubit/to_do/to_do_cubit.dart';
 
 import '../../product/widget/task_list_item.dart';
-import '../cubit/to_do_state.dart';
+import '../cubit/to_do/to_do_state.dart';
 
 class AllToDosPage extends StatelessWidget {
   const AllToDosPage({Key? key}) : super(key: key);
@@ -12,7 +12,23 @@ class AllToDosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ToDoCubit, ToDoState>(
       listener: (context, state) {
-        // TODO: implement listener
+        if (state is SetDateState) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("${state.initialDate}"),
+                        backgroundColor: Colors.red,
+                      ));
+          if (state.initialDate != null) {
+                            context
+                                .read<ToDoCubit>()
+                                .addTask(state.newAddedTask.name, state.initialDate);
+                          }            
+        }
+        if (state is AddedTaskState) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("${state.newAddedTask.name}"),
+                        backgroundColor: Colors.blue,
+                      ));        
+        }
       },
       builder: (context, state) {
         var cubit = ToDoCubit.get(context);
@@ -28,14 +44,16 @@ class AllToDosPage extends StatelessWidget {
                     Icons.delete,
                     color: Colors.grey,
                   )),
-              key: Key(thisTask.id),
+              key: UniqueKey(), //key(this.id yapmıştım önce)
               onDismissed: (direction) {
+                cubit.allTasks!.removeAt(index);
                 cubit.deleteTask(thisTask);
-                if (state is DeleteTaskState) {
-                  cubit.allTasks!.removeAt(index);
-                }
               },
-              child: TaskItem(task: thisTask),
+              child: TaskItem(
+                  task: thisTask,
+                  taskNameController: TextEditingController.fromValue(
+                    TextEditingValue(text: thisTask.name),
+                  )),
             );
           },
           itemCount: cubit.allTasks!.length,

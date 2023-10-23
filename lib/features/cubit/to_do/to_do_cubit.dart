@@ -12,39 +12,14 @@ class ToDoCubit extends Cubit<ToDoState> {
   ToDoCubit(super.initialState);
   final LocalStorage _localStorage = locator<LocalStorage>();
 
-  static ToDoCubit get(context) => BlocProvider.of(context);
 
-  //initilizing
-  int currentIndex = 0;
-  //int currentListIndex = 0;
-  //late Task task = allTasks![currentListIndex];
-  //late Task task;
-  late List<Task>? allTasks = <Task>[]; //doğrusu _alltasks şeklinde mi yazmak?
-  DateTime initialDate = DateTime.now();
+  late List<Task>? allTasks = <Task>[];
+  DateTime initialDate = DateTime.now(); 
   List<int>? keys = [];
 
-  //controller
-
-  //TextEditingController taskNameController = TextEditingController();
-
-  //methods
 
   setDate(BuildContext context, value) {
-    /* showDatePicker(
-            context: context,
-            currentDate: initialDate,
-            initialDate: initialDate,
-            firstDate: initialDate,
-            lastDate: DateTime(2030))
-        .then((date) async {
-      if (date != null) {
-        initialDate = date;
-        newAddedTask = Task.create(name: value, createdAt: date);
-        allTasks!.insert(0, newAddedTask);
-        await _localStorage.addTask(task: newAddedTask);
-      }
-      emit(SetDateState(initialDate, newAddedTask));
-    }); */
+    
     showTimePicker(context: context, initialTime: TimeOfDay.now())
         .then((time) async {
       DateTime selectedDate = DateTime(DateTime.now().year,
@@ -52,9 +27,7 @@ class ToDoCubit extends Cubit<ToDoState> {
       var newAddedTask = Task.create(
         name: value,
         createdAt: selectedDate.toUtc(),
-      ); //debugPrint(time!.format(context));       
-      /* allTasks!.insert(0, newAddedTask);       
-      await _localStorage.addTask(task: newAddedTask);  */      
+      );      
       emit(SetDateState(selectedDate, newAddedTask));     });
     }
 
@@ -67,10 +40,6 @@ class ToDoCubit extends Cubit<ToDoState> {
       emit(AddedTaskState(newAddedTask));
     }
 
-    setBottomIndex(index) {
-      currentIndex = index;
-      emit(SetCurrentIndexAppState(currentIndex));
-    }
 
 
     setName(String newValue, Task task) {
@@ -85,8 +54,8 @@ class ToDoCubit extends Cubit<ToDoState> {
       emit(SetCompletedState(task.isCompleted));
     }
 
-    deleteTask(Task task) async {
-    //allTasks!.removeAt(currentListIndex);
+    deleteTask(Task task, int currentListIndex) async {
+    allTasks!.removeAt(currentListIndex);
     await _localStorage.deleteTask(task: task);
     emit(DeleteTaskState(task.id));
   }

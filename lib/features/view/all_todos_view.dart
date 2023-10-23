@@ -31,11 +31,9 @@ class AllToDosPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        var cubit = ToDoCubit.get(context);
         return ListView.builder(
           itemBuilder: (context, index) {
-            var thisTask = cubit.allTasks![index];
-            //cubit.setListIndex(index);
+            var thisTask = context.read<ToDoCubit>().allTasks![index];
             return Dismissible(
               //yana kaydırınca silmek için
               background: const Align(
@@ -46,8 +44,7 @@ class AllToDosPage extends StatelessWidget {
                   )),
               key: UniqueKey(), //key(this.id yapmıştım önce)
               onDismissed: (direction) {
-                cubit.allTasks!.removeAt(index);
-                cubit.deleteTask(thisTask);
+                context.read<ToDoCubit>().deleteTask(thisTask, index);
               },
               child: TaskItem(
                   task: thisTask,
@@ -56,7 +53,7 @@ class AllToDosPage extends StatelessWidget {
                   )),
             );
           },
-          itemCount: cubit.allTasks!.length,
+          itemCount: context.read<ToDoCubit>().allTasks!.length,
         );
       },
     );

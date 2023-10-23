@@ -5,7 +5,6 @@ import 'package:to_do_app_with_cubit/core/init/theme/to_do_theme.dart';
 import 'package:to_do_app_with_cubit/features/cubit/to_do/to_do_cubit.dart';
 import 'package:to_do_app_with_cubit/features/cubit/to_do/to_do_state.dart';
 import 'package:to_do_app_with_cubit/features/view/bottom_nav_bar.dart';
-
 import 'product/service/locator.dart';
 
 Future<void> main() async {
@@ -28,14 +27,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ToDoCubit(InitialAppState()),
+          create: (context) => ToDoCubit(InitialState()),
         )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ToDoTheme.defaultTheme,
-        home: BottomNavBar(),
+        home: const BottomNavBar(),
       ),
     );
   }

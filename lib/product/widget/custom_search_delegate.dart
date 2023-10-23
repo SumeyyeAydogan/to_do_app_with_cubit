@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   @override
-
   //sağdaki butonları belirttiğimiz yer
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -14,7 +13,6 @@ class CustomSearchDelegate extends SearchDelegate {
       )
     ];
   }
-
   @override
   //soldaki butonları belirttiğimiz yer
   Widget? buildLeading(BuildContext context) {
@@ -29,12 +27,10 @@ class CustomSearchDelegate extends SearchDelegate {
       ),
     );
   }
-
   @override
   Widget buildResults(BuildContext context) {
     return Container();
   }
-
   @override
   Widget buildSuggestions(BuildContext context) {
     return Container();

@@ -16,23 +16,11 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ToDoCubit, ToDoState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
+    return BlocBuilder<ToDoCubit, ToDoState>(
       builder: (context, state) {
-        var cubit = ToDoCubit.get(context);
         Future.microtask(() {
           taskNameController.text = task.name;
         }); //Futuremicrotask
-
-        /*Exception has occurred.
-        FlutterError (setState() or markNeedsBuild() called during build.
-        This AnimatedBuilder widget cannot be marked as needing to build because the framework is already in the process of building widgets. A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
-        The widget on which setState() or markNeedsBuild() was called was:
-          AnimatedBuilder
-        The widget which was currently being built when the offending call was made was:
-          BlocBuilder<ToDoCubit, ToDoState>) */
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
           decoration: BoxDecoration(
@@ -62,7 +50,7 @@ class TaskItem extends StatelessWidget {
                     decoration: const InputDecoration(border: InputBorder.none),
                     onSubmitted: (newValue) async {
                       if (newValue.length > 3) {
-                        cubit.setName(newValue, task);
+                        context.read<ToDoCubit>().setName(newValue, task);
                         if (state is SetNameState) {
                           task.name = state.newName;
                         } else {
@@ -73,14 +61,14 @@ class TaskItem extends StatelessWidget {
                   ),
             leading: GestureDetector(
               onTap: () async {
-                cubit.setCompleted(task);
+                context.read<ToDoCubit>().setCompleted(task);
               },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: task.isCompleted
                       ? Colors.green
-                      : Colors.white, //state ile nasıl ulaşacağımı çözemedim
+                      : Colors.white, 
                   border: Border.all(color: Colors.grey, width: 0.8),
                 ),
                 child: const Icon(

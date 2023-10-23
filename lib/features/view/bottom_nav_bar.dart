@@ -15,6 +15,9 @@ class BottomNavBar extends StatefulWidget {
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
+@override
+void initState() {}
+
 class _BottomNavBarState extends State<BottomNavBar>
     with TickerProviderStateMixin {
   List<Widget> screenList = [
@@ -25,6 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 
   @override
   Widget build(BuildContext context) {
+    context.read<ToDoCubit>().getAllTaskFromDb();
     return BlocProvider(
       create: (context) => TabCubit(TabController(length: 3, vsync: this)),
       child: BlocBuilder<TabCubit, TabState>(
@@ -67,13 +71,7 @@ class _BottomNavBarState extends State<BottomNavBar>
                           icon: Icon(Icons.archive_outlined),
                           label: "Archived"),
                     ]),
-                body: /* cubit.allTasks!.isNotEmpty
-                    ? */
-                    screenList[state.tabController!.index]
-                /* : const Center(
-                        child: Text(ApplicationConstants.ADD_TASK),
-                      ) */
-                );
+                body: screenList[state.tabController!.index]);
           } else {
             return const SizedBox();
           }

@@ -11,7 +11,6 @@ class TabCubit extends Cubit<TabState> {
   void changeIndex({required int index}) {
     emit(TabLoading());
     tabController?.index = index;
-    print(tabController?.index);
     emit(TabInitial(tabController));
   }
 }
